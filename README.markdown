@@ -8,7 +8,11 @@ a GET URL and attach the pager markup and it will handle min/max/sizing and pagi
 
 ##Requirements
 
-jQuery 1.6
+- jQuery 1.6
+
+##Demo Requirements
+
+- A web server running PHP5.2+
 
 ##Getting Started
 
