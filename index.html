@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<title>jQuery Table Pager Demo</title>
+		<link href="css/ui-lightness/jquery-ui-1.8.18.custom.css" rel="stylesheet">
+		<style>
+			body { color: #222; font: 14px sans-serif; }
+			#pager { float: right; }
+			span.ui-state-default, input.page-display { float: left; }
+			input.page-display { margin: 0 4px; position: relative; top: 5px; width: 64px; }
+			span.ui-state-default { cursor: pointer; margin: 2px; padding: 4px; position: relative; }
+			th { background-color: #ec8e0c; padding: 2px 4px; }
+			tbody > tr:nth-child(2n+2) { background-color: #eaeaea; }
+			td { text-align: center; }
+		</style>
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.4/jquery.min.js"></script>
+		<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.18/jquery-ui.min.js"></script>
+		<script src="js/jquery.tablePager.min.js"></script>
+	</head>
+	<body>
+		<h1>jQuery Table Pager Demo</h1>
+		<h3>User Directory</h3>
+		<table>
+			<thead>
+				<tr>
+					<th>Username</th>
+					<th>Phone</th>
+				</tr>
+			</thead>
+			<tbody id="user-list">
+
+			</tbody>
+			<tfoot>
+				<tr>
+					<td colspan="2">
+						<!-- Pager markup -->
+						<div id="pager">
+							<span class="ui-state-default ui-corner-all first-page">
+								<span class="ui-icon ui-icon-arrowthickstop-1-w"></span>
+							</span>
+							<span class="ui-state-default ui-corner-all prev-page">
+								<span class="ui-icon ui-icon-arrowthick-1-w"></span>
+							</span>
+							<input type="text" class="page-display" readonly="readonly" value="1/1">
+							<span class="ui-state-default ui-corner-all next-page">
+								<span class="ui-icon ui-icon-arrowthick-1-e"></span>
+							</span>
+							<span class="ui-state-default ui-corner-all last-page">
+								<span class="ui-icon ui-icon-arrowthickstop-1-e"></span>
+							</span>
+						</div>
+						<!-- Pager markup -->
+					</td>
+				</tr>
+			</tfoot>
+		</table>
+
+		<script>
+			$(document).ready(function(){
+				$("#pager").tablePager({
+				    target: "#user-list",
+				    requestURL: "server.php"
+				});
+			});
+		</script>
+	</body>
+</html>
