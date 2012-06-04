@@ -113,6 +113,45 @@ Server responds:
 
 The `records` property can be either an array or an object literal containing either arrays or object literals. Any mix will do provided the structure is enumerable.
 
+##Available Methods
+
+#refresh
+
+Refreshes the table data by re-requesting data from the server "in-place" (using the same offset and pageSize as before).
+
+```JavaScript
+.tablePager("refresh");
+```
+
+#option
+
+Get or set any tablePager option. If no value is specified, will act as a getter. Note that some may auto-trigger a refresh (see Configuration below).
+
+```JavaScript
+.tablePager("option", optionName, [value]);
+```
+
+Example:
+
+```JavaScript
+$("#pager").tablePager("option", "pageSize", 40); // Sets pageSize to 40;
+$("#pager").tablePager("option", "pageSize"); // Returns the value of pageSize;
+```
+
+#destroy
+
+Remove the tablePager functionality completely. This will return the pager element back to its pre-init state.
+
+```JavaScript
+.tablePager("destroy");
+```
+
+Example:
+
+```JavaScript
+$("#pager").tablePager("destroy");
+```
+
 ##Configuration
 
 tablePager provides a few different options for you to override (the values shown are defaults):
@@ -121,6 +160,8 @@ tablePager provides a few different options for you to override (the values show
 {
 	/**
 	* A jQuery selector for the <tbody> tablePager will append records to.
+	* Triggers an auto-refresh when set via option method. Resets offset to 0.
+	*
 	* -This must be provided during intialization.-
 	*
 	*/
@@ -128,6 +169,8 @@ tablePager provides a few different options for you to override (the values show
 	
 	/**
 	* The URL tablePager will request data from. Can be absolute or relative.
+	* Triggers an auto-refresh when set via option method. Resets offset to 0.
+	*
 	* -This must be provided during intialization.-
 	*
 	*/
@@ -135,7 +178,8 @@ tablePager provides a few different options for you to override (the values show
 	
 	/**
 	* The max number of records visible in the table at one time and
-	* the max to request from the server.
+	* the max to request from the server. Triggers an auto-refresh
+	* when set via option method. Resets offset to 0.
 	*
 	*/
 	pageSize: 20,
