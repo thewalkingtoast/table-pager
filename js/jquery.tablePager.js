@@ -1,5 +1,5 @@
 /*
-* TablePager 1.01, jQuery plugin
+* TablePager 1.02, jQuery plugin
 *
 * Copyright(c) 2012, Adam Radabaugh
 *
@@ -50,31 +50,41 @@
 			var options = _getOptions(pager),
 				postObj = $.extend({},
 								{"offset": options.offset, "pageSize": options.pageSize},
-								options.ajaxData);
+								options.ajaxData),
+				doRequest = true;
 
-			$.get(options.requestURL, postObj, function(response){
-				if ( typeof response === "string" )
-					response = $.parseJSON(response);
+			if ( typeof options.beforeRequestCallback === "function" )
+			{
+				doRequest = options.beforeRequestCallback();
+			}
 
-				if ( response.max != null && response.max !== "" ) {
-					options.resultCount = response.max;
-				} else {
-					console.error("No `max` was specified in result for jQuery.tablePager.");
-					return;
-				}
+			if ( doRequest !== false )
+				$.get(options.requestURL, postObj, function(response){
+					if ( typeof response === "string" )
+						response = $.parseJSON(response);
 
-				var tbody = options.requestCallback(response, options);
+					if ( response.max != null && response.max !== "" ) {
+						options.resultCount = response.max;
+					} else {
+						console.error("No `max` was specified in result for jQuery.tablePager.");
+						return;
+					}
 
-				if ( typeof options.target === "string" )
-					$(options.target).html(tbody);
-				else if ( typeof options.target === "object" && typeof options.target.jquery === "string" )
-					options.target.html(tbody);
+					var tbody = options.requestCallback(response, options);
 
-				_setOptions(pager, options);
-				_updatePageDisplay(pager);
+					if ( typeof options.target === "string" )
+						$(options.target).html(tbody);
+					else if ( typeof options.target === "object" && typeof options.target.jquery === "string" )
+						options.target.html(tbody);
 
-				response = options = pager = postObj = tbody = null;
-			}, "JSON");
+					_setOptions(pager, options);
+					_updatePageDisplay(pager);
+
+					if ( typeof options.afterRequestCallback === "function" )
+						options.afterRequestCallback();
+
+					response = options = pager = postObj = tbody = null;
+				}, "JSON");
 		}
 
 		function _firstPage(pager){
@@ -152,10 +162,10 @@
 		function _setupPager(pager) {
 			var options = _getOptions(pager);
 
-			pager.find(options.firstButton).bind("click.tablePager", function(e){e.preventDefault();_firstPage(pager);});
-			pager.find(options.prevButton).bind("click.tablePager", function(e){e.preventDefault();_prevPage(pager);});
-			pager.find(options.nextButton).bind("click.tablePager", function(e){e.preventDefault();_nextPage(pager);});
-			pager.find(options.lastButton).bind("click.tablePager", function(e){e.preventDefault();_lastPage(pager);});
+			pager.find(options.firstButton).unbind("click.tablePager").bind("click.tablePager", function(e){e.preventDefault();_firstPage(pager);});
+			pager.find(options.prevButton).unbind("click.tablePager").bind("click.tablePager", function(e){e.preventDefault();_prevPage(pager);});
+			pager.find(options.nextButton).unbind("click.tablePager").bind("click.tablePager", function(e){e.preventDefault();_nextPage(pager);});
+			pager.find(options.lastButton).unbind("click.tablePager").bind("click.tablePager", function(e){e.preventDefault();_lastPage(pager);});
 
 			options = null;
 
@@ -170,28 +180,28 @@
 					*
 					*/
 					target: "",
-					
+
 					/**
 					* The URL tablePager will request data from. Can be absolute or relative.
 					* -This must be provided during intialization.-
 					*
 					*/
 					requestURL: "",
-					
+
 					/**
 					* The max number of records visible in the table at one time and
 					* the max to request from the server.
 					*
 					*/
 					pageSize: 20,
-					
+
 					/**
 					* Any additional data you wish tablePager to send to the server when it
 					* is requesting the page change records.
 					*
 					*/
 					ajaxData: {},
-					
+
 					/**
 					* The function to call for drawing once a response is received.
 					* By default, tablePager uses an interal function that simply iterates the
@@ -202,25 +212,41 @@
 					*
 					*/
 					requestCallback: _drawTable,
-					
+
+					/**
+					* Before request callback. Allows you to be notified before a
+					* request to the server is made. If false is returned, tablePager
+					* will cancel the request.
+					*
+					*/
+					beforeRequestCallback: null,
+
+					/**
+					* After request callback. Allows you to be notificed after a
+					* request has finished (post requestCallback). Useful for any
+					* additional UI setup, etc. Returns do nothing.
+					*
+					*/
+					aferRequestCallback: null,
+
 					/**
 					* The jQuery selector for the 'first button' in the pager.
 					*
 					*/
 					firstButton: ".first-page",
-					
+
 					/**
 					* The jQuery selector for the 'previous button' in the pager.
 					*
 					*/
 					prevButton: ".prev-page",
-					
+
 					/**
 					* The jQuery selector for the 'next button' in the pager.
 					*
 					*/
 					nextButton: ".next-page",
-					
+
 					/**
 					* The jQuery selector for the 'last button' in the pager.
 					*
@@ -288,12 +314,12 @@
 			}
 
 			if ( optionName !== "offset" && optionName !== "resultCount" &&
-				 optionName !== "pager" && options[optionName] )
+				optionName !== "pager" && options[optionName] )
 			{
 				options[optionName] = value;
 
 				if ( optionName === "pageSize" || optionName === "requestURL" ||
-					 optionName === "target" )
+					optionName === "target" )
 				{
 					options.offset = 0;
 					refresh = true;

@@ -125,28 +125,28 @@ tablePager provides a few different options for you to override (the values show
 	*
 	*/
 	target: "",
-	
+
 	/**
 	* The URL tablePager will request data from. Can be absolute or relative.
 	* -This must be provided during intialization.-
 	*
 	*/
 	requestURL: "",
-	
+
 	/**
 	* The max number of records visible in the table at one time and
 	* the max to request from the server.
 	*
 	*/
 	pageSize: 20,
-	
+
 	/**
 	* Any additional data you wish tablePager to send to the server when it
 	* is requesting the page change records.
 	*
 	*/
 	ajaxData: {},
-	
+
 	/**
 	* The function to call for drawing once a response is received.
 	* By default, tablePager uses an interal function that simply iterates the
@@ -155,27 +155,51 @@ tablePager provides a few different options for you to override (the values show
 	* Provide your own function to customize the drawing behavior of tablePager.
 	* Must return the complete HTML as a string or a jQuery object.
 	*
+    	* Parameters:
+    	*   - response - raw Ajax response
+    	*   - options - a JavaScript object literal with this tablePager's settings
+    	*               (e.g., options.pageSize, options.ajaxData, etc)
+    	*
+    	* Signature:
+    	*   callback(response, options)*
+	*
 	*/
 	requestCallback: _drawTable,
-	
+
+	/**
+	* Before request callback. Allows you to be notified before a
+	* request to the server is made. If false is returned, tablePager
+	* will cancel the request.
+	*
+	*/
+	beforeRequestCallback: null,
+
+	/**
+	* After request callback. Allows you to be notificed after a
+	* request has finished (post requestCallback). Useful for any
+	* additional UI setup, etc. Returns do nothing.
+	*
+	*/
+	aferRequestCallback: null,
+
 	/**
 	* The jQuery selector for the 'first button' in the pager.
 	*
 	*/
 	firstButton: ".first-page",
-	
+
 	/**
 	* The jQuery selector for the 'previous button' in the pager.
 	*
 	*/
 	prevButton: ".prev-page",
-	
+
 	/**
 	* The jQuery selector for the 'next button' in the pager.
 	*
 	*/
 	nextButton: ".next-page",
-	
+
 	/**
 	* The jQuery selector for the 'last button' in the pager.
 	*
