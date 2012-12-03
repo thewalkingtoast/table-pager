@@ -227,7 +227,7 @@
 					* additional UI setup, etc. Returns do nothing.
 					*
 					*/
-					aferRequestCallback: null,
+					afterRequestCallback: null,
 
 					/**
 					* The jQuery selector for the 'first button' in the pager.
