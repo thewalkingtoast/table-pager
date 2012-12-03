@@ -224,7 +224,7 @@ tablePager provides a few different options for you to override (the values show
 	* additional UI setup, etc. Returns do nothing.
 	*
 	*/
-	aferRequestCallback: null,
+	afterRequestCallback: null,
 
 	/**
 	* The jQuery selector for the 'first button' in the pager.
